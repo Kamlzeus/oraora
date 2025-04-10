@@ -14,7 +14,6 @@ const usersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // список пользователей
       .addCase(fetchUsers.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -27,7 +26,6 @@ const usersSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      // один пользователь
       .addCase(fetchUserById.pending, (state) => {
         state.loading = true;
         state.error = null;
