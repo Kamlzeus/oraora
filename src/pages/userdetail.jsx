@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserById } from "../store/async/usersAsync";
 
 const UserDetails = () => {
   const { id } = useParams();
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const {
+    selected: user,
+    loading,
+    error,
+  } = useSelector((state) => state.users);
+
   const [showPassword, setShowPassword] = useState(false);
   const [showUsername, setShowUsername] = useState(false);
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/users/${id}`)
-      .then((res) => res.json())
-      .then((data) => setUser(data));
-  }, [id]);
+    dispatch(fetchUserById(id));
+  }, [dispatch, id]);
 
-  if (!user)
+  if (loading || !user)
     return <p className="text-center text-xl text-white">грузим-грузим...</p>;
+  if (error) return <p className="text-red-500 text-xl">{error}</p>;
 
   return (
     <div className="w-screen h-screen flex items-center justify-center p-4 text-white">

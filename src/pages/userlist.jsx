@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../store/async/usersAsync";
 import UserCard from "../components/usercard";
 
 const UsersList = () => {
-  const [users, setUsers] = useState([]);
+  const dispatch = useDispatch();
+  const { list: users, loading, error } = useSelector((state) => state.users);
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/users")
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-  }, []);
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  if (loading) return <p className="text-white text-xl">Загрузка...</p>;
+  if (error) return <p className="text-red-500 text-xl">{error}</p>;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen pt-20">
